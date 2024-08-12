@@ -1,0 +1,8 @@
+// version 
+version -> ^4.19.2
+
+3rd part -> 2 -> this mean minor changes in the package
+2nd part -> 19-> this means recommeded bug fix 
+1st part -> 4 ->this means major fixes in the package
+
+^ -> means lock the first part in this it is 4 mean whnever you install it will just upadte the 2nd and 3rd part of teh version with lastest version 1st part  remaing unchanges
