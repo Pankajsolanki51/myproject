@@ -14,22 +14,26 @@ app.get('/users',(req,res)=>{
     res.send(html)
 })
 
-app.use((req,res,next)=>{
-    console.log("Hello from middleware 1");
-    // return res.json({msg: 'hello from middleware 1'})
-    next();
+// app.use((req,res,next)=>{
+//     console.log("Hello from middleware 1");
+//     // return res.json({msg: 'hello from middleware 1'})
+//     next();
     
-});
-app.use((req,res,next)=>{
-    console.log("Hello from middleware 2");
-    // return res.json({msg: 'hello from middleware 1'})
-    return res.end("hey")
+// });
+// app.use((req,res,next)=>{
+//     console.log("Hello from middleware 2");
+//     // return res.json({msg: 'hello from middleware 1'})
+//     // console.log(req.headers);
+//     return res.json(users)
     
     
-});
+// });
 
 //REST API
 app.get('/api/users',(req,res)=>{
+    
+    res.setHeader("X-Name","Pankaj")
+    console.log(req.headers);
     return res.json(users)
 })
 
