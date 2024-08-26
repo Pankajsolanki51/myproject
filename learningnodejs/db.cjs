@@ -1,58 +1,23 @@
 const express = require('express');
 const users = require("./MOCK_DATA.json");
+const fs = require('fs')
 const app = express();
-const PORT = 8000;// Updated to use ES module syntax
-const mongoose = require("mongoose")
+const PORT = 5000;// Updated to use ES module syntax
+const { connectMongoDb } = require("./connection.cjs")
+const userRouter = require("./routes/user.cjs")
+const { logReqRes } = require("./middleWares/db.cjs")
 
-// MONGODB CONNECTION
-mongoose.connect('mongodb://127.0.0.1:27017/nodejsTut')
-    .then(() => console.log("MongoDB connected"))
-    .catch(err => console.log("Mongo error", err));
 
-// SCHEMA
-const userSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        required: true,
-    },
-    lastName: {
-        type: String,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    jobTile: {
-        type: String,
-    },
-    gender: {
-        type: String,
-    }
-});
-
-const User = mongoose.model('User', userSchema);
+connectMongoDb("mongodb://127.0.0.1:27017/nodejsTut").then(()=> console.log("MongoDb Connected"))
 
 // Express Middleware
-app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // Route to Create User
-app.post('/create-user', async (req, res) => {
-    try {
-        const user = await User.create({
-            firstName: "pankaj",
-            lastName: "Solanki",
-            email: "ps40@gmail.com",
-            gender: "Male",
-            jobTile: "Developer",
-        });
-        console.log(user);
-        res.status(201).json({ msg: "success" });
-    } catch (err) {
-        console.error("Error creating user", err);
-        res.status(500).json({ msg: "Error creating user" });
-    }
-});
+app.use(logReqRes('log.txt'))
+
+//Routes
+app.use("/user", userRouter)
 
 // Start Server
 app.listen(PORT, () => {
